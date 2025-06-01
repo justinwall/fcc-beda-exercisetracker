@@ -1,0 +1,30 @@
+services:
+  app:
+    container_name: exercisetracker_app
+    image: node:alpine
+    ports:
+      - 3000:3000
+    networks:
+      - exercisetracker
+    volumes:
+      - .:/app
+      - /app/node_modules
+    working_dir: "/app"
+    entrypoint: ["/bin/sh", "-c", "npm install && npm run dev"]
+  db:
+    container_name: exercisetracker_db
+    image: mongo:latest
+    ports:
+      - 27017:27017
+    networks:
+      - exercisetracker
+    volumes:
+      - mongo_data:/data/db
+
+networks:
+  exercisetracker:
+    driver: bridge
+
+volumes:
+  mongo_data:
+    driver: local
